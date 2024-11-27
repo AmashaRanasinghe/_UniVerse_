@@ -110,7 +110,6 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
 
         <!-- Tab content -->
         <div class="tab-content active" id="all-posts">
-            <h2>All Posts</h2>
 
             <div class="tab-content active" id="all-posts">
 
@@ -184,9 +183,6 @@ if ($stmt = mysqli_prepare($conn, $sql)) {
         </div>
 
         <div class="tab-content" id="my-posts">
-            <h2>My Posts</h2>
-
-
 
             <!-- Create Post Button -->
             <button class="mentor-button" id="mentorButton">Add Post</button>

@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #45a04929;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 90%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction:column ;
+  }
+
+  h1{
+    text-align: center;
+  }
+  .tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .tab-btn {
+    background-color: #45a04929;
+    color: #45a049;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .tab-btn.active {
+    background-color: #4caf50;
+    color: white;
+    border-radius: 5px;
+  }
+  
+  .tab-btn:hover {
+    background-color: #45a049;
+    color: white;
+  }
+  
+  /* Tab Content Styling */
+  .tab-content {
+    display: none; /* Hide all tab content by default */
+  }
+  
+  .tab-content.active {
+    display: block; /* Show active tab content */
+  }

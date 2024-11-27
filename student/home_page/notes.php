@@ -1,304 +1,349 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
 
-include "../../connection.php";
+    include "../../connection.php";
 
-if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
-    exit();
-}
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: login.php');
+        exit();
+    }
 
-$user_id = $_SESSION['user_id'];
+    $user_id = $_SESSION['user_id'];
 
-$sql = "SELECT s.student_id, u.firstname, u.lastname, s.profile_picture FROM Student s 
-            JOIN Users u ON s.user_id = u.user_id WHERE u.user_id = ?";
-$student_id = 0;
-$firstname = '';
-$lastname = '';
-$profile_picture = '';
-if ($stmt = mysqli_prepare($conn, $sql)) {
-    mysqli_stmt_bind_param($stmt, "i", $user_id);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $student_id, $firstname, $lastname, $profile_picture);
-    mysqli_stmt_fetch($stmt);
-    mysqli_stmt_close($stmt);
-}
-
-if (isset($_POST['report'])) {
-    $content_id = $_POST['content_id'];
-    $report_reason = mysqli_real_escape_string($conn, $_POST['report_reason']);
-    $sql = "INSERT INTO Report (content_id, reported_by, report_reason, status) 
-                VALUES (?, ?, ?, 'Under Review')";
+    $sql = "SELECT s.student_id, u.firstname, u.lastname, s.profile_picture FROM Student s 
+                JOIN Users u ON s.user_id = u.user_id WHERE u.user_id = ?";
+    $student_id = 0;
+    $firstname = '';
+    $lastname = '';
+    $profile_picture = '';
     if ($stmt = mysqli_prepare($conn, $sql)) {
-        mysqli_stmt_bind_param($stmt, "iis", $content_id, $student_id, $report_reason);
+        mysqli_stmt_bind_param($stmt, "i", $user_id);
         mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-        echo "Note reported successfully.";
-    }
-    exit();
-}
-
-if (isset($_POST['add_note'])) {
-    $note_title = mysqli_real_escape_string($conn, $_POST['note_title']);
-    $note_content =  $_POST['note_content'];
-    $content_type = 'Note';
-
-    $file_url = '';
-    if (isset($_FILES['note_file']) && $_FILES['note_file']['error'] == 0) {
-        $file_name = $_FILES['note_file']['name'];
-        $file_tmp = $_FILES['note_file']['tmp_name'];
-        $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);
-        $file_url = '../../uploads/' . uniqid() . '.' . $file_ext;
-        move_uploaded_file($file_tmp, $file_url);
-    }
-
-    if (!empty($note_title) && !empty($note_content)) {
-        $sql = "INSERT INTO Content (student_id, content_type, title, description, file_url) VALUES (?, ?, ?, ?, ?)";
-        if ($stmt = mysqli_prepare($conn, $sql)) {
-            mysqli_stmt_bind_param($stmt, "issss", $student_id, $content_type, $note_title, $note_content, $file_url);
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_close($stmt);
-        }
-    }
-}
-
-if (isset($_POST['delete_comment'])) {
-    $comment_id = $_POST['comment_id'];
-
-    $sql = "SELECT student_id FROM Comments WHERE comment_id = ?";
-    if ($stmt = mysqli_prepare($conn, $sql)) {
-        mysqli_stmt_bind_param($stmt, "i", $comment_id);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_bind_result($stmt, $comment_student_id);
+        mysqli_stmt_bind_result($stmt, $student_id, $firstname, $lastname, $profile_picture);
         mysqli_stmt_fetch($stmt);
         mysqli_stmt_close($stmt);
+    }
 
-        if ($comment_student_id == $student_id) {
-            $sql = "DELETE FROM Comments WHERE comment_id = ?";
+    if (isset($_POST['report'])) {
+        $content_id = $_POST['content_id'];
+        $report_reason = mysqli_real_escape_string($conn, $_POST['report_reason']);
+        $sql = "INSERT INTO Report (content_id, reported_by, report_reason, status) 
+                    VALUES (?, ?, ?, 'Under Review')";
+        if ($stmt = mysqli_prepare($conn, $sql)) {
+            mysqli_stmt_bind_param($stmt, "iis", $content_id, $student_id, $report_reason);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+            echo "Note reported successfully.";
+        }
+        exit();
+    }
+
+    if (isset($_POST['add_note'])) {
+        $note_title = mysqli_real_escape_string($conn, $_POST['note_title']);
+        $note_content =  $_POST['note_content'];
+        $content_type = 'Note';
+
+        $file_url = '';
+        if (isset($_FILES['note_file']) && $_FILES['note_file']['error'] == 0) {
+            $file_name = $_FILES['note_file']['name'];
+            $file_tmp = $_FILES['note_file']['tmp_name'];
+            $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);
+            $file_url = '../../uploads/' . uniqid() . '.' . $file_ext;
+            move_uploaded_file($file_tmp, $file_url);
+        }
+
+        if (!empty($note_title) && !empty($note_content)) {
+            $sql = "INSERT INTO Content (student_id, content_type, title, description, file_url) VALUES (?, ?, ?, ?, ?)";
             if ($stmt = mysqli_prepare($conn, $sql)) {
-                mysqli_stmt_bind_param($stmt, "i", $comment_id);
+                mysqli_stmt_bind_param($stmt, "issss", $student_id, $content_type, $note_title, $note_content, $file_url);
                 mysqli_stmt_execute($stmt);
                 mysqli_stmt_close($stmt);
             }
         }
     }
-    header("Location: notes.php");
-    exit();
-}
 
-$sql = "SELECT * FROM Content WHERE student_id = ? AND content_type = 'Note' ORDER BY created_at DESC";
-$notes = [];
-if ($stmt = mysqli_prepare($conn, $sql)) {
-    mysqli_stmt_bind_param($stmt, "i", $student_id);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    while ($row = mysqli_fetch_assoc($result)) {
-        $notes[] = $row;
+    if (isset($_POST['delete_comment'])) {
+        $comment_id = $_POST['comment_id'];
+
+        $sql = "SELECT student_id FROM Comments WHERE comment_id = ?";
+        if ($stmt = mysqli_prepare($conn, $sql)) {
+            mysqli_stmt_bind_param($stmt, "i", $comment_id);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_bind_result($stmt, $comment_student_id);
+            mysqli_stmt_fetch($stmt);
+            mysqli_stmt_close($stmt);
+
+            if ($comment_student_id == $student_id) {
+                $sql = "DELETE FROM Comments WHERE comment_id = ?";
+                if ($stmt = mysqli_prepare($conn, $sql)) {
+                    mysqli_stmt_bind_param($stmt, "i", $comment_id);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
+                }
+            }
+        }
+        header("Location: notes.php");
+        exit();
     }
-    mysqli_stmt_close($stmt);
-}
 
-$sql = "SELECT c.content_id, c.title, c.description, c.file_url, c.created_at, u.firstname, u.lastname, s.profile_picture 
+    $sql = "SELECT * FROM Content WHERE student_id = ? AND content_type = 'Note' ORDER BY created_at DESC";
+    $notes = [];
+    if ($stmt = mysqli_prepare($conn, $sql)) {
+        mysqli_stmt_bind_param($stmt, "i", $student_id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        while ($row = mysqli_fetch_assoc($result)) {
+            $notes[] = $row;
+        }
+        mysqli_stmt_close($stmt);
+    }
+
+    $sql = "SELECT c.content_id, c.title, c.description, c.file_url, c.created_at, u.firstname, u.lastname, s.profile_picture 
+                FROM Content c 
+                JOIN Student s ON c.student_id = s.student_id 
+                JOIN Users u ON s.user_id = u.user_id 
+                WHERE c.content_type = 'Note'
+                AND c.status = 'Approved'
+                ORDER BY c.created_at DESC";
+    $all_notes = [];
+    if ($stmt = mysqli_prepare($conn, $sql)) {
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        while ($row = mysqli_fetch_assoc($result)) {
+            $all_notes[] = $row;
+        }
+        mysqli_stmt_close($stmt);
+    }
+
+    if (isset($_POST['like'])) {
+        $content_id = $_POST['content_id'];
+
+        $sql = "SELECT * FROM Likes WHERE content_id = ? AND student_id = ?";
+        if ($stmt = mysqli_prepare($conn, $sql)) {
+            mysqli_stmt_bind_param($stmt, "ii", $content_id, $student_id);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+
+            if (mysqli_num_rows($result) == 0) {
+                $sql = "INSERT INTO Likes (content_id, student_id) VALUES (?, ?)";
+                if ($stmt = mysqli_prepare($conn, $sql)) {
+                    mysqli_stmt_bind_param($stmt, "ii", $content_id, $student_id);
+                    mysqli_stmt_execute($stmt);
+                }
+            } else {
+                $sql = "DELETE FROM Likes WHERE content_id = ? AND student_id = ?";
+                if ($stmt = mysqli_prepare($conn, $sql)) {
+                    mysqli_stmt_bind_param($stmt, "ii", $content_id, $student_id);
+                    mysqli_stmt_execute($stmt);
+                }
+            }
+            mysqli_stmt_close($stmt);
+        }
+        header("Location: " . $_SERVER['HTTP_REFERER']);
+        exit();
+    }
+
+    if (isset($_POST['toggle_collection'])) {
+        $content_id = $_POST['content_id'];
+
+        $sql = "SELECT * FROM Collection WHERE content_id = ? AND student_id = ?";
+        if ($stmt = mysqli_prepare($conn, $sql)) {
+            mysqli_stmt_bind_param($stmt, "ii", $content_id, $student_id);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+
+            if (mysqli_num_rows($result) == 0) {
+                $sql = "INSERT INTO Collection (student_id, content_id) VALUES (?, ?)";
+                if ($stmt = mysqli_prepare($conn, $sql)) {
+                    mysqli_stmt_bind_param($stmt, "ii", $student_id, $content_id);
+                    mysqli_stmt_execute($stmt);
+                    echo json_encode(['status' => 'added']);
+                }
+            } else {
+                $sql = "DELETE FROM Collection WHERE content_id = ? AND student_id = ?";
+                if ($stmt = mysqli_prepare($conn, $sql)) {
+                    mysqli_stmt_bind_param($stmt, "ii", $content_id, $student_id);
+                    mysqli_stmt_execute($stmt);
+                    echo json_encode(['status' => 'removed']);
+                }
+            }
+            mysqli_stmt_close($stmt);
+        }
+        header("Location: " . $_SERVER['HTTP_REFERER']);
+        exit();
+    }
+
+    if (isset($_GET['fetch_comments'])) {
+        $content_id = $_GET['fetch_comments'];
+
+        $sql_student = "
+                SELECT student_id 
+                FROM Student 
+                WHERE user_id = ?
+            ";
+
+        $student_id = null;
+        if ($stmt_student = mysqli_prepare($conn, $sql_student)) {
+            mysqli_stmt_bind_param($stmt_student, "i", $user_id);
+            mysqli_stmt_execute($stmt_student);
+            mysqli_stmt_bind_result($stmt_student, $student_id);
+            mysqli_stmt_fetch($stmt_student);
+            mysqli_stmt_close($stmt_student);
+        }
+
+        if ($student_id === null) {
+            echo "Student ID not found.";
+            exit();
+        }
+
+        $sql = "
+                SELECT c.comment_id, c.text, c.created_at, u.firstname, u.lastname, c.student_id
+                FROM Comments c
+                JOIN Student s ON c.student_id = s.student_id
+                JOIN Users u ON s.user_id = u.user_id
+                WHERE c.content_id = ?
+                ORDER BY c.created_at ASC
+            ";
+
+        $comments = [];
+        if ($stmt = mysqli_prepare($conn, $sql)) {
+            // Bind parameters: content_id
+            mysqli_stmt_bind_param($stmt, "i", $content_id);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+
+            while ($row = mysqli_fetch_assoc($result)) {
+                $comments[] = $row;
+            }
+            mysqli_stmt_close($stmt);
+        }
+        foreach ($comments as $comment) {
+            echo '<div class="comment-details">';
+            echo '<div class="comment-author">';
+            echo '<strong>' . htmlspecialchars($comment['firstname'] . ' ' . $comment['lastname']);
+            echo '</div>';
+            echo '<div class="comment">';
+            echo htmlspecialchars($comment['text']);
+            if ($comment['student_id'] == $student_id) {
+                echo ' <button onclick="deleteComment(' . $comment['comment_id'] . ')"><i class="fa-regular fa-trash-can"></i></button>';
+            }
+            echo '</div>';
+            echo '</div>';
+        }
+
+        exit();
+    }
+
+
+    if (isset($_POST['new_comment']) && isset($_POST['content_id'])) {
+        $text = mysqli_real_escape_string($conn, $_POST['new_comment']);
+        $content_id = $_POST['content_id'];
+
+        if (!empty($text)) {
+            $sql = "INSERT INTO Comments (content_id, student_id, text) VALUES (?, ?, ?)";
+            if ($stmt = mysqli_prepare($conn, $sql)) {
+                mysqli_stmt_bind_param($stmt, "iis", $content_id, $student_id, $text);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
+            }
+        }
+        header("Location: notes.php");
+        exit();
+    }
+
+    if (isset($_GET['delete'])) {
+        // Sanitize the input
+        $content_id = intval($_GET['delete']); // Ensures it is an integer
+
+        // Check if the content exists in the database
+        $check_sql = "SELECT * FROM Content WHERE content_id = ?";
+        if ($stmt = mysqli_prepare($conn, $check_sql)) {
+            mysqli_stmt_bind_param($stmt, "i", $content_id);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+
+            if (mysqli_num_rows($result) > 0) {
+                // Proceed with deletion
+                $delete_sql = "DELETE FROM Content WHERE content_id = ?";
+                if ($delete_stmt = mysqli_prepare($conn, $delete_sql)) {
+                    mysqli_stmt_bind_param($delete_stmt, "i", $content_id);
+                    if (mysqli_stmt_execute($delete_stmt)) {
+                        // Successfully deleted
+                        echo "<script>
+                                alert('Note deleted successfully.');
+                                window.location.href = 'notes.php'; // Redirect to the posts list
+                            </script>";
+                    } else {
+                        echo "<script>
+                                alert('Failed to delete the note. Please try again.');
+                                window.history.back();
+                            </script>";
+                    }
+                    mysqli_stmt_close($delete_stmt);
+                }
+            } else {
+                // Post not found
+                echo "<script>
+                        alert('Note not found.');
+                        window.history.back();
+                    </script>";
+            }
+            mysqli_stmt_close($stmt);
+        } else {
+            // Query preparation failed
+            echo "<script>
+                    alert('An error occurred. Please try again.');
+                    window.history.back();
+                </script>";
+        }
+    }
+
+    // Handle search functionality
+    $search_query = '';
+    $all_notes = [];
+    if (isset($_GET['search'])) {
+        $search_query = trim($_GET['search']);
+        $sql = "SELECT c.content_id, c.title, c.description, c.file_url, c.created_at, u.firstname, u.lastname, s.profile_picture 
             FROM Content c 
             JOIN Student s ON c.student_id = s.student_id 
             JOIN Users u ON s.user_id = u.user_id 
             WHERE c.content_type = 'Note'
             AND c.status = 'Approved'
+            AND title LIKE ?
             ORDER BY c.created_at DESC";
-$all_notes = [];
-if ($stmt = mysqli_prepare($conn, $sql)) {
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    while ($row = mysqli_fetch_assoc($result)) {
-        $all_notes[] = $row;
-    }
-    mysqli_stmt_close($stmt);
-}
-
-if (isset($_POST['like'])) {
-    $content_id = $_POST['content_id'];
-
-    $sql = "SELECT * FROM Likes WHERE content_id = ? AND student_id = ?";
-    if ($stmt = mysqli_prepare($conn, $sql)) {
-        mysqli_stmt_bind_param($stmt, "ii", $content_id, $student_id);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        if (mysqli_num_rows($result) == 0) {
-            $sql = "INSERT INTO Likes (content_id, student_id) VALUES (?, ?)";
-            if ($stmt = mysqli_prepare($conn, $sql)) {
-                mysqli_stmt_bind_param($stmt, "ii", $content_id, $student_id);
-                mysqli_stmt_execute($stmt);
-            }
-        } else {
-            $sql = "DELETE FROM Likes WHERE content_id = ? AND student_id = ?";
-            if ($stmt = mysqli_prepare($conn, $sql)) {
-                mysqli_stmt_bind_param($stmt, "ii", $content_id, $student_id);
-                mysqli_stmt_execute($stmt);
-            }
-        }
-        mysqli_stmt_close($stmt);
-    }
-    header("Location: " . $_SERVER['HTTP_REFERER']);
-    exit();
-}
-
-if (isset($_POST['toggle_collection'])) {
-    $content_id = $_POST['content_id'];
-
-    $sql = "SELECT * FROM Collection WHERE content_id = ? AND student_id = ?";
-    if ($stmt = mysqli_prepare($conn, $sql)) {
-        mysqli_stmt_bind_param($stmt, "ii", $content_id, $student_id);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        if (mysqli_num_rows($result) == 0) {
-            $sql = "INSERT INTO Collection (student_id, content_id) VALUES (?, ?)";
-            if ($stmt = mysqli_prepare($conn, $sql)) {
-                mysqli_stmt_bind_param($stmt, "ii", $student_id, $content_id);
-                mysqli_stmt_execute($stmt);
-                echo json_encode(['status' => 'added']);
-            }
-        } else {
-            $sql = "DELETE FROM Collection WHERE content_id = ? AND student_id = ?";
-            if ($stmt = mysqli_prepare($conn, $sql)) {
-                mysqli_stmt_bind_param($stmt, "ii", $content_id, $student_id);
-                mysqli_stmt_execute($stmt);
-                echo json_encode(['status' => 'removed']);
-            }
-        }
-        mysqli_stmt_close($stmt);
-    }
-    header("Location: " . $_SERVER['HTTP_REFERER']);
-    exit();
-}
-
-if (isset($_GET['fetch_comments'])) {
-    $content_id = $_GET['fetch_comments'];
-
-    $sql_student = "
-            SELECT student_id 
-            FROM Student 
-            WHERE user_id = ?
-        ";
-
-    $student_id = null;
-    if ($stmt_student = mysqli_prepare($conn, $sql_student)) {
-        mysqli_stmt_bind_param($stmt_student, "i", $user_id);
-        mysqli_stmt_execute($stmt_student);
-        mysqli_stmt_bind_result($stmt_student, $student_id);
-        mysqli_stmt_fetch($stmt_student);
-        mysqli_stmt_close($stmt_student);
-    }
-
-    if ($student_id === null) {
-        echo "Student ID not found.";
-        exit();
-    }
-
-    $sql = "
-            SELECT c.comment_id, c.text, c.created_at, u.firstname, u.lastname, c.student_id
-            FROM Comments c
-            JOIN Student s ON c.student_id = s.student_id
-            JOIN Users u ON s.user_id = u.user_id
-            WHERE c.content_id = ?
-            ORDER BY c.created_at ASC
-        ";
-
-    $comments = [];
-    if ($stmt = mysqli_prepare($conn, $sql)) {
-        // Bind parameters: content_id
-        mysqli_stmt_bind_param($stmt, "i", $content_id);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        while ($row = mysqli_fetch_assoc($result)) {
-            $comments[] = $row;
-        }
-        mysqli_stmt_close($stmt);
-    }
-    foreach ($comments as $comment) {
-        echo '<div class="comment-details">';
-        echo '<div class="comment-author">';
-        echo '<strong>' . htmlspecialchars($comment['firstname'] . ' ' . $comment['lastname']);
-        echo '</div>';
-        echo '<div class="comment">';
-        echo htmlspecialchars($comment['text']);
-        if ($comment['student_id'] == $student_id) {
-            echo ' <button onclick="deleteComment(' . $comment['comment_id'] . ')"><i class="fa-regular fa-trash-can"></i></button>';
-        }
-        echo '</div>';
-        echo '</div>';
-    }
-
-    exit();
-}
-
-
-if (isset($_POST['new_comment']) && isset($_POST['content_id'])) {
-    $text = mysqli_real_escape_string($conn, $_POST['new_comment']);
-    $content_id = $_POST['content_id'];
-
-    if (!empty($text)) {
-        $sql = "INSERT INTO Comments (content_id, student_id, text) VALUES (?, ?, ?)";
+        $search_param = "%" . $search_query . "%";
         if ($stmt = mysqli_prepare($conn, $sql)) {
-            mysqli_stmt_bind_param($stmt, "iis", $content_id, $student_id, $text);
+            mysqli_stmt_bind_param($stmt, "s", $search_param);
             mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            while ($row = mysqli_fetch_assoc($result)) {
+                $all_notes[] = $row;
+            }
             mysqli_stmt_close($stmt);
+        } else {
+            echo "Error fetching notes: " . mysqli_error($conn);
+            exit;
         }
-    }
-    header("Location: notes.php");
-    exit();
-}
-
-if (isset($_GET['delete'])) {
-    // Sanitize the input
-    $content_id = intval($_GET['delete']); // Ensures it is an integer
-
-    // Check if the content exists in the database
-    $check_sql = "SELECT * FROM Content WHERE content_id = ?";
-    if ($stmt = mysqli_prepare($conn, $check_sql)) {
-        mysqli_stmt_bind_param($stmt, "i", $content_id);
+    } else {
+        $sql = "SELECT c.content_id, c.title, c.description, c.file_url, c.created_at, u.firstname, u.lastname, s.profile_picture 
+                FROM Content c 
+                JOIN Student s ON c.student_id = s.student_id 
+                JOIN Users u ON s.user_id = u.user_id 
+                WHERE c.content_type = 'Note'
+                AND c.status = 'Approved'
+                ORDER BY c.created_at DESC";
+    $all_notes = [];
+    if ($stmt = mysqli_prepare($conn, $sql)) {
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
-
-        if (mysqli_num_rows($result) > 0) {
-            // Proceed with deletion
-            $delete_sql = "DELETE FROM Content WHERE content_id = ?";
-            if ($delete_stmt = mysqli_prepare($conn, $delete_sql)) {
-                mysqli_stmt_bind_param($delete_stmt, "i", $content_id);
-                if (mysqli_stmt_execute($delete_stmt)) {
-                    // Successfully deleted
-                    echo "<script>
-                            alert('Note deleted successfully.');
-                            window.location.href = 'notes.php'; // Redirect to the posts list
-                        </script>";
-                } else {
-                    echo "<script>
-                            alert('Failed to delete the note. Please try again.');
-                            window.history.back();
-                        </script>";
-                }
-                mysqli_stmt_close($delete_stmt);
-            }
-        } else {
-            // Post not found
-            echo "<script>
-                    alert('Note not found.');
-                    window.history.back();
-                </script>";
+        while ($row = mysqli_fetch_assoc($result)) {
+            $all_notes[] = $row;
         }
         mysqli_stmt_close($stmt);
-    } else {
-        // Query preparation failed
-        echo "<script>
-                alert('An error occurred. Please try again.');
-                window.history.back();
-            </script>";
     }
-}
+    }
 
 
 ?>
@@ -370,6 +415,20 @@ if (isset($_GET['delete'])) {
         </div>
 
         <div id="all_notes" class="tab-content active">
+        <div class="search-bar-container">
+            <form action="notes.php" method="GET" class="search-form">
+                <input 
+                    type="text" 
+                    name="search" 
+                    value="<?php echo htmlspecialchars($search_query); ?>" 
+                    placeholder="Search..." 
+                    class="search-input"
+                >
+                <button type="submit" class="search-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
             <ul class="notes-list">
                 <?php if (count($all_notes) > 0): ?>
                     <?php foreach ($all_notes as $note): ?>

@@ -309,7 +309,7 @@ if (isset($_POST['register'])) {
                     </div>
 
                     <div class="form-outline">
-                        <input type="text" name="bio" class="form-control" placeholder="Bio" required />
+                        <input type="text" name="bio" class="form-control" placeholder="Bio" />
                     </div>
 
                     <div class="form-outline">

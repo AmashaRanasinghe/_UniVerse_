@@ -1,12 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
-* {
-  list-style: none;
-  --primary-green: #002b15;
-  --highlight-green: #abda37;
-  --white: #ffffff;
-  --grey: #f2f5f7;
-  box-sizing: border-box;
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #45a04929;
   margin: 0;
+  padding: 0;
+}
+
+.tab-container {
+  max-width: 90%;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .create-post-btn {
@@ -164,14 +171,6 @@ button:disabled {
   }
 }
 
-/* General styles */
-body {
-  font-family: "Arial", sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f9f9f9;
-  color: #333;
-}
 
 .mentor-button {
   background-color: #45a04929;
@@ -281,12 +280,6 @@ form .submit-btn:hover {
   background-color: #218838;
 }
 
-.tab-container {
-  display: flex;
-  flex-direction: column;
-  margin: 20px;
-}
-
 .tab-buttons {
   display: flex;
   justify-content: space-between;
@@ -294,7 +287,7 @@ form .submit-btn:hover {
 }
 
 .tab-btn {
-  background-color: #e8e8e8;
+  background-color: #45a04929;
   color: #45a049;
   padding: 10px 20px;
   border: none;
@@ -327,9 +320,6 @@ form .submit-btn:hover {
   display: block;
 }
 
-.tab-container {
-  margin: 20px;
-}
 
 .tab-buttons {
   display: flex;

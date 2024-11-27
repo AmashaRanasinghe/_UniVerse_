@@ -329,6 +329,82 @@
         }
     }
 
+    // Handle search functionality
+    $search_query = '';
+    $all_videos = [];
+    $sql = "SELECT c.content_id, c.title, c.description, c.file_url, u.firstname, u.lastname, s.profile_picture
+        FROM Content c
+        JOIN Student s ON c.student_id = s.student_id
+        JOIN Users u ON s.user_id = u.user_id
+        WHERE c.content_type = 'Video'
+        AND c.status = 'Approved'";
+
+if (isset($_GET['search'])) {
+    $search_query = trim($_GET['search']);
+    $sql .= " AND c.title LIKE ?";
+
+
+if ($stmt = mysqli_prepare($conn, $sql)) {
+    if (!empty($search_query)) {
+        $search_param = "%" . $search_query . "%";
+        mysqli_stmt_bind_param($stmt, 's', $search_param);
+    }
+
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $content_id, $title, $description, $file_url, $video_firstname, $video_lastname, $video_profile_picture);
+
+    while (mysqli_stmt_fetch($stmt)) {
+        $thumbnail_url = 'thumbnails/' . basename($file_url, '.mp4') . '.jpg';
+
+        $all_videos[] = [
+            'content_id' => $content_id,
+            'title' => $title,
+            'description' => $description,
+            'file_url' => $file_url,
+            'thumbnail_url' => $thumbnail_url,
+            'firstname' => $video_firstname,
+            'lastname' => $video_lastname,
+            'profile_picture' => $video_profile_picture,
+        ];
+    }
+    mysqli_stmt_close($stmt);
+} else {
+    echo "Error fetching videos: " . mysqli_error($conn);
+    exit;
+}
+    } else {
+        $sql = "SELECT c.content_id,c.title, c.description, c.file_url, u.firstname, u.lastname, s.profile_picture 
+    FROM Content c
+    JOIN Student s ON c.student_id = s.student_id
+    JOIN Users u ON s.user_id = u.user_id
+    WHERE c.content_type = 'Video'
+    AND c.status = 'Approved'";
+
+    $all_videos = [];
+    if ($stmt = mysqli_prepare($conn, $sql)) {
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $content_id,$title, $description, $file_url, $video_firstname, $video_lastname, $video_profile_picture);
+
+    while (mysqli_stmt_fetch($stmt)) {
+    // Generate thumbnail URL (this assumes the video file is stored under 'uploads/videos' and thumbnails are stored in 'uploads/thumbnails')
+    $thumbnail_url = 'thumbnails/' . basename($file_url, '.mp4') . '.jpg'; // Assuming the thumbnail is named similarly to the video file
+
+    $all_videos[] = [
+        'content_id' => $content_id,
+        'title' => $title,
+        'description' => $description,
+        'file_url' => $file_url,
+        'thumbnail_url' => $thumbnail_url,  // Generated dynamically
+        'firstname' => $video_firstname,
+        'lastname' => $video_lastname,
+        'profile_picture' => $video_profile_picture
+    ];
+    }
+    mysqli_stmt_close($stmt);
+    }
+    }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -389,8 +465,19 @@
 
     <!-- Explore Section -->
     <div id="explore" class="tab-content active">
-        <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Search videos..." onkeyup="filterVideos()" />
+        <div class="search-bar-container">
+            <form action="videos.php" method="GET" class="search-form">
+                <input 
+                    type="text" 
+                    name="search" 
+                    value="<?php echo htmlspecialchars($search_query); ?>" 
+                    placeholder="Search..." 
+                    class="search-input"
+                >
+                <button type="submit" class="search-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
         </div>
         <div class="video-grid" id="video-grid">
             <?php foreach ($all_videos as $video): ?>
@@ -407,7 +494,7 @@
                             <img class="profile-img" src="../../uploads/<?= $profile_picture ?>" alt="Profile Picture">
                             <div class="profile-info">
                                 <p class="video-title"><?= $video['title'] ?></p>
-                                <p class="video-description"><?= $video['description'] ?></p>
+                                <p class="video-description"><?= $video['description'] ?></p><br>
                                 <h4><?= $firstname . ' ' . $lastname ?></h4>
                             </div>        
                         </div>
@@ -477,13 +564,6 @@
                     </div>
                 </div>
             <?php endforeach; ?>
-        </div>
-    </div>
-
-    <!-- For You Section -->
-    <div id="for-you" class="tab-content">
-        <div class="auto-scroll-container">
-            <!-- Dynamically generated auto-playing videos -->
         </div>
     </div>
 
