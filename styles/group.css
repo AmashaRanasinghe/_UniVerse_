@@ -1,0 +1,331 @@
+/* General Body Styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #45a04929;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container Styling */
+.container {
+  max-width: 90%;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Tabs Styling */
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Tab Buttons */
+.tab-btn {
+  background-color: #45a04929;
+  color: #45a049;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.tab-btn.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.tab-btn:hover {
+  background-color: #45a049;
+  color: white;
+}
+
+/* Add Group Button */
+.add-group-btn {
+  background-color: #45a04929;
+  color: #45a049;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.add-group-btn:hover {
+  background-color: #4caf50;
+  color: white;
+}
+
+/* Group List Styling */
+.group-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Group Card Styling */
+.group-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 3000px;
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.group-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Header Section */
+.group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.group-header h3 {
+  font-size: 1.25rem;
+  color: #333;
+  margin: 0;
+}
+
+/* Join Group Button */
+.join-group-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.join-group-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Body Section */
+.group-body p {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.group-body strong {
+  color: #333;
+}
+
+/* Modal Styling */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+  padding-top: 300px;
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Form Inputs */
+.form-control {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-control:focus {
+  border-color: #4caf50;
+  outline: none;
+}
+
+/* Submit Button */
+.btn-submit {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background-color: #45a049;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .group-list {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .group-card {
+    width: 100%;
+    max-width: 350px;
+  }
+}
+
+
+
+
+/* Group Actions Styles */
+.group-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn {
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    flex: 1;
+    text-align: center;
+    margin: 0 5px;
+}
+
+/* Chat Button */
+.chat-btn {
+    background-color: #007bff;
+}
+
+.chat-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Exit Button */
+.exit-btn {
+    background-color: #dc3545;
+}
+
+.exit-btn:hover {
+    background-color: #a71d2a;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .group-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .group-card {
+        width: 90%;
+    }
+}
+
+/* Search Bar Container */
+.search-bar-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Search Form */
+.search-form {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+}
+
+/* Search Input */
+.search-input {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 30px 0 0 30px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #007BFF;
+}
+
+/* Search Button */
+.search-btn {
+    background-color: #b5dabe;
+    color: white;
+    border: none;
+    border-radius: 0 30px 30px 0;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.search-btn:hover {
+    background-color: #98d6a8;
+}
+
+/* Search Icon */
+.search-btn i {
+    font-size: 18px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .search-form {
+        flex-direction: column;
+    }
+
+    .search-input {
+        border-radius: 30px;
+        margin-bottom: 10px;
+    }
+
+    .search-btn {
+        border-radius: 30px;
+        width: 100%;
+    }
+}
