@@ -48,7 +48,7 @@ include('../connection.php');
                         <th>ID</th>
                         <th>Type</th>
                         <th>Title</th>
-                        <th>Image</th>
+                        <!-- <th>Image</th> -->
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -63,7 +63,6 @@ include('../connection.php');
                     <td>" . $row["content_id"] . "</td>
                     <td>" . $row["content_type"] . "</td>
                     <td>" . $row["title"] . "</td>
-                    <td><img src='", "/" .  $row["file_url"] . "' style='width: 100px; height: 100px;'></td>
                     <td>
                         <form method='POST' action='../admin/funcs/content_update.php'>
                             <input type='hidden' name='content_id' value='" . $row["content_id"] . "'>

@@ -40,7 +40,6 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
                 <li class="menu-item"><a href="../admin/content.php"><i class="fas fa-file-alt"></i> Content</a></li>
                 <li class="menu-item"><a href="../admin/mentorships.php"><i class="fas fa-user-friends"></i> Mentorship</a></li>
                 <li class="menu-item"><a href="../admin/analytics.php"><i class="fas fa-chart-pie"></i> Analytics</a></li>
-                <li class="menu-item"><a href="#"><i class="fas fa-clipboard-list"></i> Logs</a></li>
             </ul>
         </nav>
         <!-- <hr> -->

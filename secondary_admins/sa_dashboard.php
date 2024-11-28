@@ -80,15 +80,6 @@ session_start();
 
                 </div>
             </div>
-            <div class="activity-log">
-                <h2>Recent Activities</h2>
-                <ul>
-                    <li>User Micheal Jackson posted a new article.</li>
-                    <li>User Shane Willis posted a new article.</li>
-                    <li>User Jaques Webster posted a new article.</li>
-                    <li>User Lil Wayne commented on a post.</li>
-                </ul>
-            </div>
         </div>
     </div>
 </body>

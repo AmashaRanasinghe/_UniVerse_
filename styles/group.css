@@ -378,9 +378,14 @@ body {
 }
 
 .message {
+  background-color: #45a04929;
+  padding: 20px;
+  border: 1px solid green;
+  border-radius: 20px;
   margin-bottom: 10px;
 }
 
-.message strong {
+.message h1 {
+  padding: 0;
   color: black;
 }

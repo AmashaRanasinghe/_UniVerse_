@@ -40,7 +40,6 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
         <!-- <hr> -->
         <div class="sidebar-footer">
             <ul>
-                <li class="menu-item"><a href="#"><i class="fas fa-user-circle"></i> Profile</a></li>
                 <li class="menu-item"><a href="?action=logout"><i class="fas fa-right-from-bracket"></i> Logout</a></li>
             </ul>
         </div>

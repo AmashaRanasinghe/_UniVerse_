@@ -148,7 +148,7 @@ if (isset($_POST['update'])) {
         <button type="submit" name="update" class="btn">Update Profile</button>
     </form>
     <div class="back-button-container">
-    <a href="../home_page/home.php" class="btn btn-back">
+    <a href="../home_page/notes.php" class="btn btn-back">
         <i class="fas fa-arrow-left"></i> Back to Home
     </a>
 </div>

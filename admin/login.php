@@ -19,12 +19,12 @@ if (isset($_POST['login'])) {
 
       if ($_POST['admin_type'] === "Primary Administrator") {
         echo "<script>alert('Successfully Logged in as Primary Administrator'); 
-       window.location.href='../../universe/admin/dashboard.php';
+       window.location.href='../../_UniVerse_/admin/dashboard.php';
         </script>";
         exit();
       } elseif ($_POST['admin_type'] === "Secondary Administrator") {
         echo "<script>alert('Successfully Logged in as Secondary Administrator'); 
-        window.location.href='../../universe/secondary_admins/sa_dashboard.php';
+        window.location.href='../../_UniVerse_/secondary_admins/sa_dashboard.php';
         </script>";
         exit();
       } else {

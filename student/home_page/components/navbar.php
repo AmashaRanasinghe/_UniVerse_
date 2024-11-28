@@ -80,7 +80,6 @@
                     <a href="../home_page/update_profile.php"><i class="fas fa-user-edit"></i> Edit User Details</a>
                     <a href="../home_page/notifications.php"><i class="fas fa-bell"></i> Notifications</a>
                     <a href="../home_page/collection.php"><i class="fas fa-box"></i> Collections</a>
-                    <a href="#"><i class="fas fa-chart-line"></i> Rank</a>
                     <a href="../home_page/mygroups.php"><i class="fas fa-users"></i> My Groups</a>
                     <a href="../../index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </div>
