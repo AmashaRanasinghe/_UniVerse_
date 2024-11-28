@@ -6,11 +6,17 @@ body {
   padding: 0;
 }
 
+.main-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 /* Container Styling */
 .container {
-  max-width: 90%;
-  margin: 50px auto;
+  max-width: 100%;
   padding: 20px;
+  margin: 50px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -66,7 +72,8 @@ body {
 /* Group List Styling */
 .group-list {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: start;
   gap: 20px;
   justify-content: center;
   padding: 20px;
@@ -77,7 +84,8 @@ body {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 3000px;
+  /* width: 3000px; */
+  width: 100%;
   padding: 20px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
@@ -206,73 +214,70 @@ body {
   }
 }
 
-
-
-
 /* Group Actions Styles */
 .group-actions {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .btn {
-    padding: 8px 15px;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    color: white;
-    flex: 1;
-    text-align: center;
-    margin: 0 5px;
+  padding: 8px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  color: white;
+  flex: 1;
+  text-align: center;
+  margin: 0 5px;
 }
 
 /* Chat Button */
 .chat-btn {
-    background-color: #007bff;
+  background-color: #007bff;
 }
 
 .chat-btn:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 /* Exit Button */
 .exit-btn {
-    background-color: #dc3545;
+  background-color: #dc3545;
 }
 
 .exit-btn:hover {
-    background-color: #a71d2a;
+  background-color: #a71d2a;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .group-list {
-        flex-direction: column;
-        align-items: center;
-    }
+  .group-list {
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .group-card {
-        width: 90%;
-    }
+  .group-card {
+    width: 90%;
+  }
 }
 
 /* Search Bar Container */
 .search-bar-container {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
 }
 
 /* Search Form */
 .search-form {
-    display: flex;
-    align-items: center;
-    position: relative;
-    width: 100%;
-    max-width: 500px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  max-width: 500px;
 }
 
 .search-input {
@@ -310,22 +315,72 @@ body {
 
 /* Search Icon */
 .search-btn i {
-    font-size: 18px;
+  font-size: 18px;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .search-form {
-        flex-direction: column;
-    }
+  .search-form {
+    flex-direction: column;
+  }
 
-    .search-input {
-        border-radius: 30px;
-        margin-bottom: 10px;
-    }
+  .search-input {
+    border-radius: 30px;
+    margin-bottom: 10px;
+  }
 
-    .search-btn {
-        border-radius: 30px;
-        width: 100%;
-    }
+  .search-btn {
+    border-radius: 30px;
+    width: 100%;
+  }
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 300px;
+  width: 100%;
+  margin-top: 50px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  line-height: 2.5rem;
+}
+
+#chat-box {
+  overflow-y: auto;
+  /* border: 1px solid #45a049; */
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.chat-container h2 {
+  text-align: center;
+}
+
+#chat-form input {
+  border-radius: 100px;
+  padding: 10px 20px;
+}
+
+.chat-container button {
+  border: none;
+  background-color: #45a049;
+  border-radius: 50%;
+  padding: 15px;
+}
+
+#chat-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.message {
+  margin-bottom: 10px;
+}
+
+.message strong {
+  color: black;
 }
